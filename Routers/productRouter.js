@@ -1,8 +1,7 @@
 const router = require("express").Router();
-const User = require("../models/userModel");
+const Product = require("../models/productModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const Product = require("../models/productModel");
 
 
 router.post("/", async (req, res) => {
@@ -71,7 +70,7 @@ router.get("/currentproduct", async(req, res) => {
 router.delete("/delete/:id", async(req, res) => {
   try {
     const productId = req.params;
-    await Product.findByIdAndDelete(userId.id);
+    await Product.findByIdAndDelete(productId.id);
     
     res.send("Ok");
     
@@ -80,11 +79,11 @@ router.delete("/delete/:id", async(req, res) => {
   }
 })
 
-router.get("/users", async(req, res) => {
+router.get("/products", async(req, res) => {
     try {
-      const users = await User.find();
+      const products = await Product.find();
       
-      res.send(users);
+      res.send(products);
       
     } catch (err) {
       return res.status(500).json(null);
@@ -93,25 +92,12 @@ router.get("/users", async(req, res) => {
 
 router.post("/:id", async(req, res) => {
   try {
-    const userId = req.params;
-    const updateUser = await User.findByIdAndUpdate(userId.id, {name: req.body.name, lastname: req.body.lastname, email: req.body.email, phone: req.body.phone, department: req.body.department});
-    res.send(updateUser);
+    const productId = req.params;
+    const updateProduct = await Product.findByIdAndUpdate(productId.id, {name: req.body.name, description: req.body.description, price: req.body.price});
+    res.send(updateProduct);
   } catch (err) {
     return res.status(500).json(null);
   }
-})
-
-router.post("/reset/:id", async(req, res) => {
-    try{
-        const userId = req.params;
-        const securePassword = generateSecurePassword(16);
-        const salt = await bcrypt.genSalt();
-        const passwordHash = await bcrypt.hash(securePassword, salt);
-        const resetPass = await User.findByIdAndUpdate(userId.id, {passwordHash: passwordHash});
-        res.send(securePassword);
-    } catch (err) {
-        return res.status(500).json(null);
-    }
 })
 
 module.exports = router;

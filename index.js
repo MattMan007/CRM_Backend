@@ -31,9 +31,9 @@ app.listen(PORT, () => {
 
 // set up routers
 app.use("/users", require("./routers/userRouter"));
-app.use("/users", require("./routers/eventRouter"));
-app.use("/users", require("./routers/producRouter"));
-app.use("/users", require("./routers/projectRouter"));
+app.use("/events", require("./routers/eventRouter"));
+app.use("/products", require("./routers/productRouter"));
+//app.use("/projects", require("./routers/projectRouter"));
 
 
 // connect to mongoDB
